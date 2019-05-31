@@ -1,0 +1,13 @@
+CAR detected:
+(320, 116, 38, 38)
+CAR detected:
+(124, 135, 52, 52)
+CAR detected:
+(300, 157, 61, 61)
+CAR detected:
+(494, 166, 92, 92)
+CAR detected:
+(569, 157, 100, 100)
+CAR detected:
+(258, 29, 254, 254)
+('Number of cars in the image: ', 6)

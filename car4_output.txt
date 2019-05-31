@@ -1,0 +1,69 @@
+CAR detected:
+(503, 302, 36, 36)
+CAR detected:
+(1093, 91, 31, 31)
+CAR detected:
+(637, 273, 34, 34)
+CAR detected:
+(536, 296, 34, 34)
+CAR detected:
+(1069, 820, 36, 36)
+CAR detected:
+(362, 374, 32, 32)
+CAR detected:
+(526, 320, 39, 39)
+CAR detected:
+(343, 390, 45, 45)
+CAR detected:
+(570, 734, 43, 43)
+CAR detected:
+(293, 326, 41, 41)
+CAR detected:
+(780, 298, 52, 52)
+CAR detected:
+(492, 370, 47, 47)
+CAR detected:
+(844, 357, 69, 69)
+CAR detected:
+(698, 372, 64, 64)
+CAR detected:
+(767, 348, 59, 59)
+CAR detected:
+(613, 415, 61, 61)
+CAR detected:
+(580, 358, 64, 64)
+CAR detected:
+(514, 373, 62, 62)
+CAR detected:
+(612, 387, 58, 58)
+CAR detected:
+(658, 339, 63, 63)
+CAR detected:
+(626, 304, 69, 69)
+CAR detected:
+(1122, 398, 72, 72)
+CAR detected:
+(522, 421, 109, 109)
+CAR detected:
+(873, 466, 105, 105)
+CAR detected:
+(981, 399, 133, 133)
+CAR detected:
+(216, 581, 112, 112)
+CAR detected:
+(1163, 543, 122, 122)
+CAR detected:
+(925, 577, 124, 124)
+CAR detected:
+(260, 505, 115, 115)
+CAR detected:
+(437, 561, 126, 126)
+CAR detected:
+(613, 551, 159, 159)
+CAR detected:
+(731, 659, 173, 173)
+CAR detected:
+(508, 607, 191, 191)
+CAR detected:
+(412, 504, 217, 217)
+('Number of cars in the image: ', 34)
