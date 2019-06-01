@@ -4,7 +4,7 @@ import numpy as np
 import sys
 import argparse
 
-DEFAULT_IMAGE_PATH = 'car1.jpg'
+DEFAULT_IMAGE_PATH = 'images/car1.jpg'
 
 def find_cars(args):
     car_cascade = cv2.CascadeClassifier('cars.xml')
@@ -73,10 +73,10 @@ if __name__ == '__main__':
     args = get_parser(sys.argv[1:])
     cars, img = find_cars(args)
     
-    show_frames(cars, img)
-    show_pos(cars)
     find_corners(img)
     find_lines(img)
+    show_frames(cars, img)
+    show_pos(cars)
 
     print ("Cars detected: {0}".format(len(cars)))
     
