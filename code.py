@@ -6,8 +6,9 @@ import argparse
 
 # CONSTANTS
 DEFAULT_PARKING_DATA_FILE = 'parking_data/parking_test_1.yml'
-DEFAULT_VIDEO_PATH = 'videos/parking_test_1.mp4'
+DEFAULT_VIDEO_PATH = 'videos/parking_test_2.mp4'
 DEFAULT_CAR_CASCADE = 'models/car_classifier.xml'
+DEFAULT_OUTPUT_PATH = 'output/output_video.avi'
 LAPLACIAN_THRESHOLD = 2.8
 
 WAIT_TIME = 1
@@ -20,6 +21,8 @@ def get_parser(args):
     parser.add_argument('--video_path', type=str, default=DEFAULT_VIDEO_PATH)
     parser.add_argument('--mark_lot', type=bool, default=False)
     parser.add_argument('--car_cascade', type=str, default=DEFAULT_CAR_CASCADE) 
+    parser.add_argument('--save_video', type=bool, default=False)
+    parser.add_argument('--output_path', type=str, default=DEFAULT_OUTPUT_PATH)
     return parser.parse_args(args)
 
 
@@ -32,11 +35,23 @@ refPt = []
 data = []
 image_to_crop = None
 car_cascade = cv2.CascadeClassifier(args.car_cascade)
+output_video = None 
+
+
+
+
+def init_conf():
+    open(args.parking_data_file, "a")
 
 
 def is_car(img):
     cars = car_cascade.detectMultiScale(img, 1.1, 1)
     return cars != ()
+
+def get_cars(img):
+    return car_cascade.detectMultiScale(img, 1.1, 1)
+            
+
 
 
 def yaml_loader():
@@ -138,9 +153,13 @@ def helper_load_parking_data():
 #def laplacian_check()
 
 def run_algo():
+    global output_video
     cap = cv2.VideoCapture(args.video_path)
-    parking_data_motion = []
+    if args.save_video == True:
+        fourcc = cv2.VideoWriter_fourcc('X','V','I','D')
+        output_video = cv2.VideoWriter(args.output_path, fourcc, 25.0,(int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))))
 
+    parking_data_motion = []
 
     cap.set(cv2.CAP_PROP_POS_FRAMES, 0)  
     kernel_erode = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(3,3))
@@ -175,12 +194,15 @@ def run_algo():
             points = np.array(park['points'])
             rect = parking_bounding_rects[ind]
             roi_gray = frame_gray[rect[1]:(rect[1]+rect[3]), rect[0]:(rect[0]+rect[2])] # crop roi for faster calcluation
-
+            cars_within = get_cars(roi_gray)
+            #print ("CARS: ID = {0}, cars = {1}".format(ind, cars_within))
+            
             laplacian = cv2.Laplacian(roi_gray, cv2.CV_64F)
             points[:,0] = points[:,0] - rect[0] # shift contour to roi
             points[:,1] = points[:,1] - rect[1]
             delta = np.mean(np.abs(laplacian * parking_mask[ind]))
             status = delta < LAPLACIAN_THRESHOLD
+
             # If detected a change in parking status, save the current time
             if status != parking_status[ind] and parking_buffer[ind]==None:
                 parking_buffer[ind] = video_cur_pos
@@ -230,7 +252,6 @@ def run_algo():
                 bw1 = cv2.dilate(bw1, kernel_dilate, iterations=1)
                 (_, cnts1, _) = cv2.findContours(bw1.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
                 for c in cnts1:
-                    print(cv2.contourArea(c))
                     if cv2.contourArea(c) < 4:
                         continue
                     (x, y, w, h) = cv2.boundingRect(c)
@@ -248,6 +269,11 @@ def run_algo():
                 cv2.drawContours(frame_out, [points], contourIdx=-1,
                                      color=color, thickness=2, lineType=cv2.LINE_8)
 
+        #cap.set(cv2.CAP_PROP_POS_FRAMES, video_cur_frame + 10)
+        
+        if args.save_video == True:
+            output_video.write(frame_out)
+
         cv2.imshow('frame', frame_out)
         if cv2.waitKey(33) == 27:
             break
@@ -257,8 +283,12 @@ def run_algo():
     cv2.destroyAllWindows()   
 
 if __name__ == '__main__':
+    init_conf()
     run_algo()
 
+    # output video
+    if args.save_video == True:
+        output_video.release()
 
 
 
